@@ -1,0 +1,50 @@
+version: '2'
+
+services:
+    web:
+        image: nginx:latest
+        ports:
+            - "8089:80"
+        volumes:
+            - ./:/api
+            - ./site.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - php
+            - mysqldb
+
+    php:
+        image: php-fpm:7.2
+        volumes:
+            - ./:/api
+
+    composer:
+       image: composer:latest
+       working_dir: /api
+       volumes:
+           - ./:/api
+       command:
+           - update
+
+    mysqldb:
+        image: mysql:5.7
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=coursesapi
+        restart: 'always'
+        ports:
+            - "8090:3306"
+        volumes:
+            - "./data/db/mysql:/var/lib/mysql"
+    solr:
+        image: solr:7.2
+        ports:
+            - "8984:8983"
+        volumes:
+            - "data:/opt/solr/server/solr/mycores"
+        entrypoint:
+            - docker-entrypoint.sh
+            - solr-precreate
+            - courses
+
+volumes:
+   data:

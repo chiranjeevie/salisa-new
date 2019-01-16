@@ -1,0 +1,107 @@
+# Run symfony console
+sudo docker-compose exec php  php /code/bin/console assets:install public
+## Adding conent
+# Run symfony console locally
+sudo /usr/local/bin/docker-compose exec php  php /api/bin/console asset:install
+
+# Run symfony console locally to clear cache
+sudo /usr/local/bin/docker-compose exec php  php /api/bin/console  cache:clear
+
+#Run symfony console locally
+sudo /usr/local/bin/docker-compose exec php  php /api/bin/console
+
+# Run composer
+sudo  docker-compose run --rm -v $(pwd)/code:/code composer install
+
+sudo  docker-compose run --rm -v $(pwd)/code:/code composer require --dev api-platform/schema-generator
+
+# Easy admin installation locally
+sudo /usr/local/bin/docker-compose run --rm -v $(pwd)/:/api composer require easycorp/easyadmin-bundle
+
+
+# Publish routes for Routing.generate JS API
+sudo docker-compose exec php  php /code/bin/console fos:js-routing:dump --format=json --target=/code/public/build/js/fos_js_routes.json
+
+
+# Run cs-fixer
+sudo docker-compose exec php  php /code/php-cs-fixer-v2.phar
+
+# Mysql login
+sudo docker-compose exec mysqldb mysql -u root -p
+
+# Mysql login locally
+sudo /usr/local/bin/docker-compose exec mysqldb mysql -u root -p
+
+# Webpack
+yarn run encore dev
+yarn run encore dev --watch
+yarn run encore productionS
+
+
+# Issues
+
+## Can't connect MySQL Database
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root';
+FLUSH PRIVILEGES;
+
+
+
+# To Drop Database :
+docker-compose exec php php /api/bin/console doctrine:database:drop --force
+
+# To Create Database :
+docker-compose exec php php /api/bin/console doctrine:database:create
+
+# To remove existing migration files :
+rm -rf api/src/Migrations/*
+
+# To make migrations :
+docker-compose exec php php /api/bin/console make:migration
+docker-compose exec php php /api/bin/console doctrine:migrations:migrate
+
+# To load fixtures
+docker-compose exec php php /api/bin/console doctrine:fixtures:load
+
+# To load fixtures locally
+sudo /usr/local/bin/docker-compose exec php  php /api/bin/console doctrine:fixtures:load
+
+
+# To clear Cache :
+docker-compose exec php php /api/bin/console cache:clear
+docker-compose exec php php /api/bin/console  doctrine:cache:clear-metadata
+
+
+
+###JWT setup
+
+###Reference: https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/index.md#prerequisites
+
+###Generate the SSH keys :
+
+###Note: Enter same password for each time when it asks for for below commands
+
+mkdir -p config/jwt # For Symfony3+, no need of the -p option
+openssl genrsa -out config/jwt/private.pem -aes256 4096
+openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+
+####In case first openssl command forces you to input password use following to get the private key decrypted
+
+openssl rsa -in config/jwt/private.pem -out config/jwt/private2.pem
+mv config/jwt/private.pem config/jwt/private.pem-back
+
+
+###Browse Via Postman Locally:
+http://localhost:8089/api/login_check
+
+###body->raw->data
+
+{
+"username":"admin",
+"password":"pass_1234"
+}
+
+##header
+
+Accept:application/ld+json
+Authorization:Bearer
+Content-Type:application/json

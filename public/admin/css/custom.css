@@ -1,0 +1,19 @@
+body {
+  background-color: #e3e7ee;
+
+}
+
+.sidebar-menu .header {
+  color: #1c2248;
+  font-weight: bold;
+  line-height: 0.9;
+}
+
+.main-sidebar{
+  background-color: #b7c5de;
+}
+
+
+.sidebar-menu  {
+  line-height: 0.9;
+}

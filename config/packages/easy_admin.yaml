@@ -1,0 +1,109 @@
+easy_admin:
+  site_name: '<img src="/admin/images/logo.png">'
+  list:
+    max_results: 10
+  design:
+    form_theme:
+      - '@EasyAdmin/form/bootstrap_4.html.twig'
+      - '@VichUploader/Form/fields.html.twig'
+      - '@AdminLTE/layout/default-layout.html.twig'
+    assets:
+      favicon: '/config/images/logo.png'
+      css:
+        - '/admin/css/custom.css'
+      js:
+
+    menu:
+
+
+      - { label: 'Salisa Integration' }
+      - Customers
+      - Items
+      - Categories
+
+  entities:
+
+    User:
+      class: App\Entity\User
+      controller: App\Controller\UserAdminController
+      form: {fields: [username, email, role, password,isActive]}
+    Roles:
+      class: App\Entity\Role
+
+    Categories:
+      label: 'Categories'
+      #search:
+      #  fields: ['name', 'endpoint', 'key2']
+      class: App\Entity\Category
+      form: {fields: [name,sort_order,isActive,parent]}
+      list: {help: 'List of available categories', actions: [ {name: show, icon: info-circle, label: Show}], fields: [name,{ property: 'isActive', type: 'boolean' },sort_order,parent], sort: id}
+
+    Customers:
+      label: 'Customers'
+      disabled_actions: ['new']
+      #search:
+      #  fields: ['name', 'endpoint', 'key2']
+      class: App\Entity\Customers
+      form: {fields: [cust_id,isactive,firstname,lastsname,firstname_ar,lastsname_ar,email,passwordhash,lastorderdate,loyaltypoints]}
+      list: {help: 'Customers', actions: [ {name: show, icon: info-circle, label: Show}], fields: [cust_id,{ property: 'isactive', type: 'boolean' },firstname,lastsname,firstname_ar,lastsname_ar,email,loyaltypoints], sort: id}
+    Items:
+      label: 'Items'
+      disabled_actions: ['new','delete']
+      #search:
+      #  fields: ['name', 'endpoint', 'key2']
+      class: App\Entity\Items
+      form: {fields: [id,sku,displayname,displayname_ar,description_ar,description,category,onlineprice,availableqty]}
+      list: {help: 'List of available items', actions: [ {name: show, icon: info-circle, label: Show}], fields: [sku,displayname,displayname_ar,category,onlineprice,{ property: 'availableqty', type: 'boolean' }], sort: id}
+
+   # Orders:
+    #  label: 'Orders'
+    #  disabled_actions: ['new','delete']
+      #search:
+      #  fields: ['name', 'endpoint', 'key2']
+      #class: App\Entity\Orders
+      #form: {fields: [number,customerid,deliveryoption,Status,netamount,phonenumber,contactemail,discountammount,loyaltypointsearned,orderdate]}
+      #list: {help: 'Orders', actions: [ {name: show, icon: info-circle, label: Show}], fields: [number,customerid,deliveryoption,{ property: 'Status', type: 'boolean' },netamount,contactemail,orderdate], sort: id}
+
+    NetSuiteConfiguration:
+      label: 'NetSuite Configuration'
+      #search:
+      #  fields: ['name', 'endpoint', 'key2']
+      class: App\Entity\NetSuiteConfiguration
+      form: {fields: [name,endpoint,host_url,account,consumer_key,consumer_secret,token,token_secret,signature_algorithm]}
+      list: {help: 'NetSuite API Configuration.', actions: [ {name: show, icon: info-circle, label: Show}], fields: [name,endpoint,host_url,account], sort: id}
+
+    RevelConfiguration:
+      label: 'Revel Configuration'
+
+      class: App\Entity\RevelConfiguration
+      form: {fields: [name,domain_name,secret,revel_key]}
+      list: {help: 'Revel API Configuration.', actions: [ {name: show, icon: info-circle, label: Show}], fields: [name,domain_name], sort: id}
+
+    NetsuiteToRevelHistory:
+      class: App\Entity\NetsuiteToRevelHistory
+      disabled_actions: ['new']
+      label: 'Netsuite Sync History'
+      form: {fields: [{ property: 'ranTime', format: 'j/n/Y' },status,error]}
+      list: {help: 'Netsuite to revel scheduler history.', actions: [ {name: show, icon: info-circle, label: Show}], fields: [ranTime,status,error], sort: id}
+
+    RevelToNetsuiteHistory:
+      label: 'Revel Sync History'
+      disabled_actions: ['new']
+      class: App\Entity\RevelToNetsuiteHistory
+      form: {fields: [ran_time,is_success,error,processed_records_count]}
+      list: {help: 'Revel to netsuite scheduler history.', actions: [ {name: show, icon: info-circle, label: Show}], fields: [ran_time,{ property: 'is_success', type: 'boolean' },error,processed_records_count], sort: id}
+
+    Scheduler:
+      class: App\Entity\Scheduler
+
+      form: {fields: [name,description,interval_time]}
+      list: {help: 'Most recent scheduler history!', actions: [ 'search', {name: show, icon: info-circle, label: Show}], fields: [name,last_ran_time,interval_time,is_active,{ property: 'is_success', type: 'boolean' }], sort: id}
+
+    SyncHistory:
+      class: App\Entity\SyncHistory
+      #search:
+      #  fields: ['source', 'destination', 'transaction_record']
+      label: 'Sync Records'
+      disabled_actions: ['new']
+      form: {fields: [source,destination,module_name,module_entity,entity_id,transaction_record,is_success,error,created_at]}
+      list: {help: 'Most recent scheduler history!', actions: [ {name: show, icon: info-circle, label: Show}], fields: [source,destination,module_name,module_entity,entity_id,{ property: 'is_success', type: 'boolean' },created_at], sort: id}
